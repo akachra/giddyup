@@ -22,8 +22,8 @@ resolve: {
   alias: {
 "@": "./src",
     
-"@shared": path.resolve(import.meta.dirname, "shared"),
-"@assets": path.resolve(import.meta.dirname, "attached_assets"),
+"@shared": "../shared",
+"@assets": "../attached_assets",
   },
 },
   
