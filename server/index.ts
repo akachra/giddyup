@@ -188,36 +188,21 @@ app.use((req, _res, next) => {
     throw err;
   });
 
-// Dynamically touch Vite only in dev; fall back if it's not installed
-if (app.get("env") === "development") {
-  try {
-    const { setupVite } = await import("./vite");
-    await setupVite(app, server);
-  } catch (e: any) {
-    console.log("[VITE] not available; serving static instead.", e?.code || e?.message || e);
-    const { serveStatic } = await import("./vite");
-    serveStatic(app);
-  }
+// Use direct static serving instead of Vite
+const clientDist = path.join(process.cwd(), "client", "dist");
+console.log("[FRONTEND] Checking for static files at:", clientDist);
+console.log("[FRONTEND] Files exist:", fs.existsSync(clientDist));
+if (fs.existsSync(clientDist)) {
+  // serve static assets (js/css/images)
+  app.use(express.static(clientDist, { index: false, maxAge: "1h" }));
+  // SPA fallback to index.html
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+  console.log("[express] Serving static client from:", clientDist);
 } else {
-  const { serveStatic } = await import("./vite");
-  serveStatic(app);
+  console.log("[express] No static client build found; API will still run.");
 }
-
-  // ---- Serve client build in production without importing Vite ----
-  if (process.env.NODE_ENV !== "development") {
-    const clientDist = path.join(process.cwd(), "client", "dist");
-    if (fs.existsSync(clientDist)) {
-      // serve static assets (js/css/images)
-      app.use(express.static(clientDist, { index: false, maxAge: "1h" }));
-      // SPA fallback to index.html
-      app.get("*", (_req, res) => {
-        res.sendFile(path.join(clientDist, "index.html"));
-      });
-      console.log("[express] Serving static client from:", clientDist);
-    } else {
-      console.log("[express] No static client build found; API will still run.");
-    }
-  }
 
 
   const port = parseInt(process.env.PORT || "5000", 10);
