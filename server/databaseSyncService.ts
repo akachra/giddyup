@@ -159,7 +159,7 @@ export class DatabaseSyncService {
           AND date = ${correction.date}
       `);
       
-      if (result.rowCount > 0) {
+      if (result.rowCount && result.rowCount > 0) {
         changes++;
         console.log(`✅ Updated ${correction.date} sleep: ${correction.minutes} minutes`);
       }
@@ -176,7 +176,7 @@ export class DatabaseSyncService {
           AND date = ${correction.date}
       `);
       
-      if (result.rowCount > 0) {
+      if (result.rowCount && result.rowCount > 0) {
         changes++;
         console.log(`✅ Protected ${correction.date} steps: ${correction.steps} (authentic value)`);
       }
@@ -254,7 +254,7 @@ export class DatabaseSyncService {
           AND (sleep_duration_minutes != ${correction.minutes} OR sleep_duration_minutes IS NULL)
       `);
       
-      if (result.rowCount > 0) {
+      if (result.rowCount && result.rowCount > 0) {
         changes++;
         console.log(`🛠️  Sleep overlap corrected: ${correction.date} → ${correction.minutes} minutes`);
       }
@@ -301,7 +301,7 @@ export class DatabaseSyncService {
           AND (weight != ${correction.weight} OR weight IS NULL)
       `);
 
-      if (result.rowCount > 0) {
+      if (result.rowCount && result.rowCount > 0) {
         changes++;
         console.log(`⚖️  Weight synced: ${correction.date} → ${correction.weight} lbs`);
       }
@@ -447,32 +447,6 @@ export class DatabaseSyncService {
     ];
   }
 
-  /**
-   * Quick sync check for critical data inconsistencies
-   * Production: Apply critical fixes only
-   * Development: Skip to protect corrections
-   */
-  async performQuickSync(): Promise<SyncResult> {
-    console.log("🔍 Performing directional quick sync...");
-    
-    if (this.isProduction) {
-      // Production: Apply critical fixes from development
-      const sleepFixes = await this.applySleepOverlapCorrections();
-      
-      return {
-        success: true,
-        message: `Quick sync completed (PROD). ${sleepFixes} critical fixes applied.`,
-        changesApplied: sleepFixes
-      };
-    } else {
-      // Development: Skip quick sync to protect corrections
-      return { 
-        success: true, 
-        message: "Quick sync skipped (DEV) - protecting corrections", 
-        changesApplied: 0 
-      };
-    }
-  }
   /**
    * Sync manual heart rate data from development to production (for development role)
    */
