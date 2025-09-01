@@ -1,0 +1,37 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+
+# Environment and sensitive files
+.env
+.env.local
+.env.production
+.env.development
+
+# Database connection files (keep backups but not connection strings)
+# Note: database backups (.sql, .sql.gz) are included for repository storage
+
+# Logs and temporary files
+*.log
+.cache
+.temp
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+.DS_Store?
+._*.env
+node_modules/
+.replit
+.replit-database
+.npm/
+dist/
+build/

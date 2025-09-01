@@ -1,0 +1,200 @@
+                    const stageDuration = (stage.stage_end_time - stage.stage_start_time) / (1000 * 60); // minutes
+                    console.log(`  ${date} Stage ${stage.stage_type}: ${Math.round(stageDuration)} minutes`);
+                    
+                    // Store individual sleep stage data point with timestamps
+                    try {
+                      // Correct Google Fit / Health Connect stage type codes
+                      const stageNames = {
+                        1: 'awake',
+                        2: 'sleep', // Generic sleep
+                        3: 'out_of_bed',
+                        4: 'light_sleep',
+                        5: 'deep_sleep',
+                        6: 'rem_sleep'
+                      };
+                      
+                      const sleepStageDataPoint = ComprehensiveFieldMapper.mapToHealthDataPoint({
+                        stage_start_time: stage.stage_start_time,
+                        stage_end_time: stage.stage_end_time,
+                        stage_type: stage.stage_type,
+                        duration_minutes: stageDuration
+                      }, 'sleep_stage', stageDuration, 'default-user');
+                      
+                      const existingMetadata = sleepStageDataPoint.metadata as any || {};
+                      sleepStageDataPoint.metadata = {
+                        ...existingMetadata,
+                        stageType: stageNames[stage.stage_type as keyof typeof stageNames] || 'unknown',
+                        stageNumber: stage.stage_type
+                      };
+                      
+                      if (this.isValidImportDate(sleepStageDataPoint.startTime)) {
+                        await storage.upsertHealthDataPoint(sleepStageDataPoint);
+                        console.log(`  Stored sleep stage data point: ${stageNames[stage.stage_type as keyof typeof stageNames]} for ${stageDuration} minutes`);
+                      }
+                    } catch (dataPointError) {
+                      console.error('Error storing sleep stage data point:', dataPointError);
+                    }
+                    
+                    // Aggregate stage data for daily totals
+                    switch (stage.stage_type) {
+                      case 1: // Awake
+                      case 3: // Out-of-bed
+                        dayWakeEvents++;
+                        break;
+                      case 2: // Generic sleep (count as light sleep if no specific breakdown)
+                      case 4: // Light sleep
+                        dayLightSleep += stageDuration;
+                        break;
+                      case 5: // Deep sleep
+                        dayDeepSleep += stageDuration;
+                        break;
+                      case 6: // REM sleep
+                        dayRemSleep += stageDuration;
+                        break;
+                    }
+                  }
+                  
+                  // Update daily sleep data with aggregated stage data
+                  if (dailySleepData.has(date)) {
+                    const dayData = dailySleepData.get(date)!;
+                    dayData.totalDeepSleep = Math.max(dayData.totalDeepSleep, dayDeepSleep);
+                    dayData.totalRemSleep = Math.max(dayData.totalRemSleep, dayRemSleep);
+                    dayData.totalLightSleep = Math.max(dayData.totalLightSleep, dayLightSleep);
+                    dayData.totalWakeEvents = Math.max(dayData.totalWakeEvents, dayWakeEvents);
+                  }
+                }
+              }
+            }
+            resolve();
+          });
+        });
+
+        // Create consolidated sleep records for each day
+        for (const [date, dayData] of Array.from(dailySleepData.entries())) {
+          try {
+            // Calculate overall sleep metrics for the day
+            const totalDuration = dayData.totalDuration;
+            const actualSleepTime = dayData.totalDeepSleep + dayData.totalRemSleep + dayData.totalLightSleep;
+            const sleepEfficiency = actualSleepTime > 0 ? Math.round((actualSleepTime / totalDuration) * 100) : 85;
+            const wakeEvents = Math.max(dayData.totalWakeEvents, dayData.sessions.length);
+            
+            // Create comprehensive record from aggregated Health Connect data
+            const rawRecord = {
+              date: date,
+              sleepDuration: Math.round(totalDuration),
+              deepSleep: Math.round(dayData.totalDeepSleep),
+              remSleep: Math.round(dayData.totalRemSleep),
+              lightSleep: Math.round(dayData.totalLightSleep),
+              sleepEfficiency,
+              wakeEvents,
+              sleepScore: Math.round(metricsCalculator.calculateSleepScore({
+                sleepDurationMinutes: totalDuration,
+                deepSleepMinutes: dayData.totalDeepSleep,
+                wakeEvents,
+                sleepEfficiency
+              }) || 0),
+              sleepDebt: Math.round(this.calculateSleepDebt(totalDuration)),
+              recoveryScore: Math.round(metricsCalculator.calculateRecoveryScore({
+                sleepDurationMinutes: totalDuration,
+                deepSleepMinutes: dayData.totalDeepSleep,
+                remSleepMinutes: dayData.totalRemSleep,
+                heartRateVariability: undefined, // Use authentic HRV data when available
+                restingHeartRate: undefined, // Use authentic RHR data when available
+                steps: 0, // Sleep import doesn't have step data
+                caloriesBurned: 0, // Sleep import doesn't have calorie data
+                weeklyData: [] // Will be populated when historical data is available
+              }) || 0)
+            };
+            
+            const healthMetric = ComprehensiveFieldMapper.mapToHealthMetrics(rawRecord, 'default-user');
+
+            // Never import data for today's date - only yesterday and earlier
+            if (this.isValidImportDate(healthMetric.date)) {
+              await storage.upsertHealthMetrics(healthMetric);
+              imported++;
+            } else {
+              console.log(`Skipping Health Connect record for today's date: ${healthMetric.date.toISOString().split('T')[0]}`);
+            }
+          } catch (error) {
+            console.error('Error importing daily sleep record:', error);
+          }
+        }
+
+        console.log(`Imported ${imported} consolidated daily sleep records`);
+        resolve(imported);
+      });
+    });
+  }
+
+  /**
+   * Import heart rate data from Health Connect database
+   */
+  private async importHeartRateData(db: sqlite3.Database): Promise<number> {
+    return new Promise((resolve, reject) => {
+      // Set timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        console.log('=== HEART RATE IMPORT TIMEOUT ===');
+        resolve(0);
+      }, 5000); // 5 second timeout
+
+      try {
+        console.log('=== STARTING HEART RATE IMPORT ===');
+        
+        // First, let's inspect the heart rate table structure
+        db.all("PRAGMA table_info(heart_rate_record_series_table)", (err, columns: any[]) => {
+          if (!err && columns) {
+            console.log('Heart rate series table columns:', columns.map(c => c.name));
+          }
+        });
+        
+        db.all("PRAGMA table_info(heart_rate_record_table)", (err, columns: any[]) => {
+          if (!err && columns) {
+            console.log('Heart rate record table columns:', columns.map(c => c.name));
+          }
+        });
+        
+        db.all("PRAGMA table_info(resting_heart_rate_record_table)", (err, columns: any[]) => {
+          if (!err && columns) {
+            console.log('Resting heart rate table columns:', columns.map(c => c.name));
+          }
+        });
+        
+        // Check for any sample data in each table
+        db.all("SELECT COUNT(*) as count FROM heart_rate_record_series_table", (err, result: any[]) => {
+          if (!err && result) {
+            console.log(`Heart rate series table has ${result[0]?.count || 0} records`);
+          }
+        });
+        
+        db.all("SELECT COUNT(*) as count FROM heart_rate_record_table", (err, result: any[]) => {
+          if (!err && result) {
+            console.log(`Heart rate record table has ${result[0]?.count || 0} records`);
+          }
+        });
+        
+        db.all("SELECT COUNT(*) as count FROM resting_heart_rate_record_table", (err, result: any[]) => {
+          if (!err && result) {
+            console.log(`Resting heart rate record table has ${result[0]?.count || 0} records`);
+          }
+        });
+
+        // First check heart rate series table for detailed readings
+        const seriesQuery = `
+        SELECT 
+          epoch_millis,
+          beats_per_minute
+        FROM heart_rate_record_series_table
+        ORDER BY epoch_millis DESC 
+        LIMIT 1000
+      `;
+
+      console.log('Executing heart rate series query...');
+      db.all(seriesQuery, async (err, rows: any[]) => {
+        clearTimeout(timeout);
+        console.log('Heart rate series query callback executed');
+        console.log('Heart rate series query result:', { err: err?.message, rowCount: rows?.length || 0 });
+        if (err || !rows || rows.length === 0) {
+          console.log('Heart rate series data not found, checking resting heart rate table:', err?.message);
+          
+          // Fallback to resting heart rate table
+          const restingQuery = `

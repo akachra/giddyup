@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // compile ONLY the server, emit JS to dist/
+    "rootDir": "server",
+    "outDir": "dist",
+
+    // ensure we emit JS (we're running node on compiled output)
+    "noEmit": false,
+
+    // override client-specific / vite types so tsc stops pulling them in
+    "types": [],
+
+    // make sure we don't require the ts-extensions rule that blocks emit
+    "allowImportingTsExtensions": false,
+
+    // speed + fewer lib headaches
+    "skipLibCheck": true
+  },
+  "include": [
+    "server/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "client",
+    "server/healthConnectImporter_temp.ts",
+    "server/healthConnectImporter_fixed.ts",
+    "client/src/pages/Dashboard_backup.tsx"
+  ]
+}

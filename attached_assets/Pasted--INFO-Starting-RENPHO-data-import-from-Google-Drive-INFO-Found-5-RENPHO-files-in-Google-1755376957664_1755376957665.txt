@@ -1,0 +1,167 @@
+ℹ️ INFO: Starting RENPHO data import from Google Drive...
+
+ℹ️ INFO: Found 5 RENPHO files in Google Drive
+
+ℹ️ INFO: Processing RENPHO file: RENPHO Health-akachra1
+
+✅ IMPORTED: renpho_data for 2025-08-14 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-13 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-10 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-08 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-06 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-03 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-02 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-02 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-08-01 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-28 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-26 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-24 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-22 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-22 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-22 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-20 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-19 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-18 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-17 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-15 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-15 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-12 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-10 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-09 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-07 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-07 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-06 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-06 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-05 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-05 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-04 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-04 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-03 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-02 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-02 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-07-01 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-30 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-29 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-28 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-28 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-28 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-26 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-26 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-26 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-25 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-25 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-23 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-23 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-22 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-21 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-20 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-20 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-20 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-19 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-18 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-17 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-06-16 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-04-01 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-03-30 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-03-27 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-03-24 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-01-25 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2025-01-25 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-10-28 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-24 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-16 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-15 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-10 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-08 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-05 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-04 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-09-03 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-08-18 | Old: null → New: imported
+
+✅ IMPORTED: renpho_data for 2024-08-16 | Old: null → New: imported
+
+ℹ️ INFO: RENPHO CSV processing complete: 79 rows processed, 79 records imported
+
+ℹ️ INFO: Successfully imported 79 records from RENPHO Health-akachra1

@@ -1,0 +1,104 @@
+Giddyup Health App - Metrics Reference Guide
+This document outlines every metric tracked or planned in the Giddyup Health App, with detailed notes on their source, calculation methodology, and how they may be affected or enhanced by integrating blood pressure (BP) readings or external devices.
+________________________________________
+1. Metabolic Age
+•	Definition: An estimate of the user’s physiological age based on health metrics.
+•	Base Calculation (without BP):
+o	Derived from weight, body fat %, visceral fat, BMI, BMR (Renpho scale).
+o	Adjusted using activity/sleep patterns from Mi Band / Health Connect.
+o	Proprietary algorithm blends these to estimate “metabolic” age.
+•	With BP Enhancement:
+o	Includes resting systolic/diastolic average over past 7 days.
+o	Penalty or bonus score based on deviation from 120/80 norm.
+________________________________________
+2. Sleep Quality Score
+•	Definition: Measures restfulness and recovery based on sleep patterns.
+•	Source: Health Connect from Mi Band (sleep stage data).
+•	Calculation:
+o	Time asleep + duration in deep sleep stages.
+o	Penalty for interruptions or irregular sleep times.
+o	Scaled 0-100.
+•	With BP:
+o	Morning BP incorporated as recovery indicator.
+________________________________________
+3. Strain Score (Daily Load)
+•	Definition: Cardiovascular & metabolic stress from physical exertion.
+•	Base Source: Mi Band activity and heart rate + Health Connect.
+•	Calculation:
+o	Cumulative exertion = (Steps, active minutes, heart rate zones).
+o	Compared to personal 7-day moving average.
+o	Output: 0-21 scale similar to WHOOP.
+•	With BP:
+o	BP spikes during day may increase score.
+________________________________________
+4. Recovery Score
+•	Definition: Body’s ability to recover from prior strain.
+•	Inputs: Sleep quality, HRV (Mi Band), resting heart rate, previous day’s strain.
+•	Calculation:
+o	Weighted average of inputs.
+o	Penalized if sleep < 6 hours or HRV trend is down.
+•	With BP:
+o	Recovery is penalized if AM BP is elevated vs. baseline.
+________________________________________
+5. Activity Ring / Completion Score
+•	Definition: Visual ring showing % of daily activity goal.
+•	Calculation: Steps or calories burned vs. user-set or AI-recommended daily goal.
+•	With BP:
+o	No direct impact.
+________________________________________
+6. AI Coach Summary
+•	Definition: Summary insight card generated daily.
+•	Inputs: All major metrics (strain, recovery, sleep, metabolic age, activity).
+•	Generation:
+o	AI model (OpenAI/OpenRouter) composes a 2-3 sentence personalized message.
+o	Feedback adjusts based on recent trends and goal adherence.
+________________________________________
+7. Resting Heart Rate (RHR)
+•	Source: Mi Band / Health Connect.
+•	Displayed As: Rolling average + trend arrow.
+________________________________________
+8. HRV (Heart Rate Variability)
+•	Source: Mi Band if supported (or manually entered).
+•	Impact: Used for recovery and strain calculation.
+________________________________________
+9. Blood Pressure (if device connected)
+•	Source: Omron or other BP monitor via Health Connect or manual entry.
+•	Values: Systolic / Diastolic, displayed as AM and PM averages.
+•	Impact: Enhances metabolic age, recovery, sleep, and strain.
+________________________________________
+10. Weight & Body Metrics
+•	Source: Renpho scale synced via Health Connect.
+•	Includes: Weight, body fat %, muscle %, BMI, visceral fat, BMR.
+•	Impact: Used for metabolic age and AI goal suggestions.
+________________________________________
+11. Nutrition Summary (Phase 2)
+•	Inputs: Barcode scans, label OCR, meal photos.
+•	Data: Carbs, protein, fat, calories per meal.
+•	Calculation: Net carbs (total carbs - fiber), total macros.
+•	With BP:
+o	Optionally correlate sodium intake with BP readings.
+________________________________________
+12. Weekly Summary Card
+•	Definition: Highlights weekly averages and trends.
+•	Includes: Sleep avg, strain avg, recovery trend, weight change, BP trend.
+•	Source: Aggregated data from above metrics.
+________________________________________
+13. Logged Activities
+•	Definition: Hiking, padel, pickleball, etc. (user-logged or detected).
+•	Impact: Adds to strain score.
+________________________________________
+This document will be updated with each version to reflect any additional metrics or enhanced algorithms.
+
+GiddyUp Metrics and Calculations
+This document outlines all the key health metrics used in the GiddyUp app, including their definitions, methods of calculation, and whether they are computed using hard-coded formulas or require AI interpretation. Where applicable, the influence of blood pressure integration is also noted.
+Metric	Calculation	Method	BP Enhancement
+Resting Heart Rate (RHR)	Minimum average HR during sleep period (from Health Connect)	Hard-coded	No
+Heart Rate Variability (HRV)	Root Mean Square of Successive Differences (RMSSD) or SDNN if available	Hard-coded if raw intervals are available, else AI-estimated	Yes – detects stress patterns with BP spikes
+Strain	TRIMP-like formula using HR zones × duration × intensity weighting	Hard-coded	Yes – highlight post-workout hypertension risk
+Steps / Distance / Calories	Direct from device or calculated from step count and user profile (age, weight)	Hard-coded	No
+Sleep Score	Weighted index of duration, efficiency, consistency, and wake events	Hard-coded (similar to Whoop/Garmin sleep scoring)	Yes – can flag nocturnal hypertension
+Recovery Score	Weighted sum of HRV (40%) + RHR (20%) + Sleep score (20%) + Strain (10%) + BP (10%)	Hard-coded formula	Yes – factored directly
+Weekly Summary	Aggregate of Recovery, Sleep, Strain, HRV, and Activity levels across 7 days	Hard-coded aggregation	Yes – visual trend lines
+Metabolic Age	Derived using BMR formula + HRV + RHR + BP deviation from norm	Partially hard-coded; enhanced by AI	Yes – significant factor in biological age
+Fitness Age	Estimate of VO2max using resting HR, weight, and recent strain activity	Hard-coded approximation	Yes – age-adjusted thresholding
+AI Coaching	Interprets weekly data trends to generate insights and personalized feedback	AI only (OpenRouter / GPT models)	Yes – customized coaching with BP integration
