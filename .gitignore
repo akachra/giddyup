@@ -1,37 +1,46 @@
-node_modules
-dist
-.DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+# --- Replit specific ---
+.replit
+.replit-database
+.nix
+.npm/
+*.replit
 
-# Environment and sensitive files
+# --- Environment / secrets ---
 .env
-.env.local
-.env.production
-.env.development
+.env.*
+*.key
+*.pem
 
-# Database connection files (keep backups but not connection strings)
-# Note: database backups (.sql, .sql.gz) are included for repository storage
+# --- Node / package managers ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
 
-# Logs and temporary files
+# --- Build outputs ---
+dist/
+build/
+.next/
+out/
+coverage/
 *.log
-.cache
-.temp
 
-# IDE and editor files
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE / editor junk ---
 .vscode/
 .idea/
 *.swp
 *.swo
+*.bak
 
-# OS generated files
-Thumbs.db
-.DS_Store?
-._*.env
-node_modules/
-.replit
-.replit-database
-.npm/
-dist/
-build/
+# --- Misc ---
+*.zip
+*.tar
+*.gz
