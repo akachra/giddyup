@@ -1,3 +1,2 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* temp: no tailwind */
+body{font-family:system-ui,sans-serif;margin:0;padding:0}
